@@ -1,0 +1,28 @@
+{
+  "name": "mask-electron",
+  "version": "0.1.0",
+  "description": "A decentralized social network",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "start": "npm run build && electron ./dist/main.js"
+  },
+  "repository": "https://github.com/mask-dsn/mask-electron",
+  "keywords": [
+    "decentralized",
+    "social",
+    "network",
+    "mask",
+    "blockchain",
+    "Electron",
+    "typescript"
+  ],
+  "author": "mask-dsn",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "electron": "^3.0.8",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.6"
+  }
+}
