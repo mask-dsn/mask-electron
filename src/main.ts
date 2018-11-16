@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from "electron";
+import * as IPFS from "ipfs";
 import * as path from "path";
 
 let mainWindow: Electron.BrowserWindow;
@@ -14,7 +15,7 @@ function createWindow() {
 	mainWindow.loadFile(path.join(__dirname, "../index.html"));
 
 	// Open the DevTools.
-	// mainWindow.webContents.openDevTools();
+	mainWindow.webContents.openDevTools();
 
 	// Emitted when the window is closed.
 	mainWindow.on("closed", () => {
@@ -23,6 +24,18 @@ function createWindow() {
 		// when you should delete the corresponding element.
 		mainWindow = null;
 	});
+
+	// Spawn your IPFS node \o/
+	const node = new IPFS();
+
+	node.on('ready', () => {
+		node.id((err, id) => {
+			if (err) {
+				return console.log(err)
+			}
+			console.log(id)
+		})
+	})
 }
 
 // This method will be called when Electron has finished
