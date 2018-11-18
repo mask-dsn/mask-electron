@@ -19,7 +19,7 @@
 	"author": "mask-dsn",
 	"license": "Apache-2.0",
 	"devDependencies": {
-		"electron": "^3.0.9"
+		"electron": "^2.0.13"
 	},
 	"dependencies": {
 		"ipfs": "^0.33.1"
