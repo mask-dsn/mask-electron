@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require("electron");
+// const IPFS = require("ipfs");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -7,13 +8,13 @@ let mainWindow;
 
 function createWindow() {
 	// Create the browser window.
-	mainWindow = new BrowserWindow({ width: 800, height: 600 });
+	mainWindow = new BrowserWindow({ width: 600, height: 1000, x: 0, y: 0 });
 
 	// and load the index.html of the app.
 	mainWindow.loadFile("index.html");
 
 	// Open the DevTools.
-	mainWindow.webContents.openDevTools();
+	// mainWindow.webContents.openDevTools({ mode: "bottom" });
 
 	// Emitted when the window is closed.
 	mainWindow.on("closed", function() {
@@ -23,17 +24,14 @@ function createWindow() {
 		mainWindow = null;
 	});
 
-	// Spawn your IPFS node \o/
-	const node = new IPFS();
+	// Spawn your IPFS node
+	// const node = new IPFS();
 
-	node.on('ready', () => {
-		node.id((err, id) => {
-			if (err) {
-				return console.log(err)
-			}
-			console.log(id)
-		})
-	})
+	// node.on("ready", async () => {
+	// 	const version = await node.version();
+
+	// 	console.log("Version:", version.version);
+	// });
 }
 
 // This method will be called when Electron has finished
