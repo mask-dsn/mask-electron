@@ -30,7 +30,10 @@ function createWindow() {
 	});
 
 	// Spawn your IPFS node
-	const node = new IPFS();
+	const node = new IPFS({
+		repo: path.join(__dirname, "/.ipfs"),
+		relay: { enabled: true, hop: { enabled: true } }
+	});
 
 	node.on("ready", async () => {
 		// log ipfs version
