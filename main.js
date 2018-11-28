@@ -30,12 +30,27 @@ function createWindow() {
 	});
 
 	// Spawn your IPFS node
-	const node = new IPFS();
+	const node = new IPFS({
+		repo: path.join(__dirname, "/.ipfs"),
+		relay: { enabled: true, hop: { enabled: true } }
+	});
 
 	node.on("ready", async () => {
+		// log ipfs version
 		const version = await node.version();
-
 		console.log("Version:", version.version);
+
+		// add a file
+		const filesAdded = await node.files.add({
+			path: "hello.txt",
+			content: Buffer.from("Hello from Mask")
+		});
+
+		console.log("Added file:", filesAdded[0].path, filesAdded[0].hash);
+
+		const fileBuffer = await node.files.cat(filesAdded[0].hash);
+
+		console.log("Added file contents:", fileBuffer.toString());
 	});
 }
 
