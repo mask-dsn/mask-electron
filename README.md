@@ -16,7 +16,7 @@
 3. [Install js-ipfs globally](https://github.com/ipfs/js-ipfs#ipfs-cli)
 4. [IPFS Alpha Demo](https://www.youtube.com/watch?v=8CMxDNuuAiQ&t=645s) first 9 minutes
 
-### Additional Resources
+### IPFS Additional Resources
 
 1. [An Introduction to IPFS](https://medium.com/@ConsenSys/an-introduction-to-ipfs-9bba4860abd0)
 2. [js-ipfs Examples and Tutorials](https://github.com/ipfs/js-ipfs/tree/master/examples)
@@ -33,7 +33,7 @@ A basic Electron application needs just these files:
 - `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
 - `index.html` - A web page to render. This is the app's **renderer process**.
 
-## Resources for Learning Electron
+### Electron Additional Resources
 
 - [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
 - [electronjs.org/community#boilerplates](https://electronjs.org/community#boilerplates) - sample starter apps created by the community
