@@ -11,10 +11,37 @@
 </head>
 
 <body>
-	<textarea class="form-control" rows="3" placeholder="Your post"></textarea>
-	<input class="form-control" type="text" placeholder="Your name">
-	<button class="btn btn-large btn-default">Refresh</button>
-	<button class="btn btn-large btn-primary">Post</button>
+	<form>
+		<div class="form-group">
+			<textarea class="form-control post" rows="5" placeholder="Your post"></textarea>
+			<input class="form-control name" type="text" placeholder="Your name">
+		</div>
+		<div class="form-actions">
+			<button class="btn btn-large btn-default">Refresh</button>
+			<button class="btn btn-large btn-primary">Post</button>
+		</div>
+	</form>
+
+	<ul class="list-group">
+		<li class="list-group-item">
+			<div class="media-body">
+				<strong>List item title</strong>
+				<p>Lorem ipsum dolor sit amet.</p>
+			</div>
+		</li>
+		<li class="list-group-item">
+			<div class="media-body">
+				<strong>List item title</strong>
+				<p>Lorem ipsum dolor sit amet.</p>
+			</div>
+		</li>
+		<li class="list-group-item">
+			<div class="media-body">
+				<strong>List item title</strong>
+				<p>Lorem ipsum dolor sit amet.</p>
+			</div>
+		</li>
+	</ul>
 	<script>
 		// You can also require other files to run in this process
 		require('./renderer.js')
