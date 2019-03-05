@@ -23,6 +23,7 @@
   "dependencies": {
     "electron-reload": "^1.4.0",
     "ipfs": "^0.34.4",
-    "cryptiles": ">=4.1.2"
+    "cryptiles": ">=4.1.2",
+    "lodash": ">=4.17.11"
   }
 }
