@@ -1,28 +1,27 @@
 {
-	"name": "mask-electron",
-	"version": "0.1.0",
-	"description": "A decentralized social network",
-	"main": "main.js",
-	"scripts": {
-		"start": "electron ."
-	},
-	"repository": "https://github.com/mask-dsn/mask-electron",
-	"keywords": [
-		"decentralized",
-		"social",
-		"network",
-		"mask",
-		"blockchain",
-		"Electron",
-		"typescript"
-	],
-	"author": "mask-dsn",
-	"license": "Apache-2.0",
-	"devDependencies": {
-		"electron": "^2.0.13"
-	},
-	"dependencies": {
-		"electron-reload": "^1.3.0",
-		"ipfs": "^0.33.1"
-	}
+  "name": "mask-electron",
+  "version": "0.1.0",
+  "description": "A decentralized social network",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/mask-dsn/mask-electron",
+  "keywords": [
+    "decentralized",
+    "social",
+    "network",
+    "mask",
+    "blockchain",
+    "Electron"
+  ],
+  "author": "mask-dsn",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "electron": "^4.0.7"
+  },
+  "dependencies": {
+    "electron-reload": "^1.4.0",
+    "ipfs": "^0.34.4"
+  }
 }
