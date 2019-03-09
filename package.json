@@ -18,7 +18,7 @@
 	"author": "mask-dsn",
 	"license": "Apache-2.0",
 	"devDependencies": {
-		"electron": "^2.0.13"
+		"electron": "^2.0.18"
 	},
 	"dependencies": {
 		"cryptiles": ">=4.1.2",
