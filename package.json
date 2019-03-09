@@ -21,8 +21,9 @@
 		"electron": "^2.0.13"
 	},
 	"dependencies": {
+		"cryptiles": ">=4.1.2",
 		"electron-reload": "^1.4.0",
 		"ipfs": "^0.33.1",
-		"cryptiles": ">=4.1.2"
+		"lotion": "^0.4.10"
 	}
 }
