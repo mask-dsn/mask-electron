@@ -256,11 +256,14 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.6.3",
+    "body-parser": "^1.18.3",
     "connected-react-router": "^5.0.1",
+    "crypto-js": "^3.1.9-1",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",
     "electron-updater": "^4.0.6",
+    "express": "^4.16.4",
     "history": "^4.7.2",
     "ipfs": "^0.34.4",
     "react": "^16.7.0",
@@ -271,7 +274,8 @@
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "source-map-support": "^0.5.9"
+    "source-map-support": "^0.5.9",
+    "ws": "^6.2.0"
   },
   "devEngines": {
     "node": ">=7.x",

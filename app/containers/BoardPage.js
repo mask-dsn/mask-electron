@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Board from '../components/Board';
-import * as BoardActions from '../actions/Board';
+import * as BoardActions from '../actions/board';
 
 function mapStateToProps(state) {
   console.log(state);
