@@ -1,6 +1,7 @@
 matrix:
   allow_failures:
     - os: windows
+    - os: linux
   include:
     - os: osx
       language: node_js
