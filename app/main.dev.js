@@ -13,6 +13,7 @@
 import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import IPFS from 'ipfs';
 import MenuBuilder from './menu';
 
 export default class AppUpdater {
@@ -99,4 +100,23 @@ app.on('ready', async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  const node = new IPFS();
+
+  node.on('ready', async () => {
+    const version = await node.version();
+
+    console.log('Version:', version.version);
+
+    const filesAdded = await node.add({
+      path: 'hello.txt',
+      content: Buffer.from('Hello World 101')
+    });
+
+    console.log('Added file:', filesAdded[0].path, filesAdded[0].hash);
+
+    const fileBuffer = await node.cat(filesAdded[0].hash);
+
+    console.log('Added file contents:', fileBuffer.toString());
+  });
 });
