@@ -15,6 +15,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import IPFS from 'ipfs';
 import MenuBuilder from './menu';
+import { connect, disconnect } from './utils/tracker';
 
 export default class AppUpdater {
   constructor() {
@@ -94,6 +95,7 @@ app.on('ready', async () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+    disconnect();
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -103,6 +105,10 @@ app.on('ready', async () => {
   // eslint-disable-next-line
   new AppUpdater();
 
+  // ngrok
+  connect();
+
+  // IPFS
   const node = new IPFS();
 
   node.on('ready', async () => {
