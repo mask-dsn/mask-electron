@@ -5,7 +5,7 @@ const p2p_port = process.env.P2P_PORT || 6001;
 
 async function connect() {
   const url = await ngrok.connect(http_port);
-  console.log(url);
+  console.log(`ngrok URL: ${url}`);
 }
 
 async function disconnect() {
