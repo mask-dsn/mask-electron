@@ -238,4 +238,4 @@ var responseLatestMsg = () => ({
 var write = (ws, message) => ws.send(JSON.stringify(message));
 var broadcast = message => sockets.forEach(socket => write(socket, message));
 
-export { connectToPeers, initHttpServer, initP2PServer };
+export { connectToPeers, initHttpServer, initP2PServer, Block, blockchain };
