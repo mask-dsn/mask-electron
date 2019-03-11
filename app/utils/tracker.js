@@ -14,19 +14,22 @@ const firebaseConfig = {
 const collectionName = 'tracker';
 const documentName = 'peer';
 
+let myUrl;
+let docRef;
+
 async function connect() {
-  let url = await ngrok.connect(p2pPort);
-  url = url.replace(/^https?:\/\//, '');
-  console.log(`ngrok URL: ${url}`);
+  const url = await ngrok.connect(p2pPort);
+  myUrl = url.replace(/^https?:\/\//, '');
+  console.log(`my ngrok URL: ${url}`);
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const firestore = firebase.firestore();
-  const docRef = firestore.collection(collectionName).doc(documentName);
+  docRef = firestore.collection(collectionName).doc(documentName);
 
   // write my ngrok url to tracker
   docRef.update({
-    url: firebase.firestore.FieldValue.arrayUnion(url)
+    url: firebase.firestore.FieldValue.arrayUnion(myUrl)
   });
 
   // read peers from tracker
@@ -48,6 +51,9 @@ async function connect() {
 async function disconnect() {
   await ngrok.disconnect(); // stops all
   await ngrok.kill(); // kills ngrok process
+  await docRef.update({
+    url: firebase.firestore.FieldValue.arrayRemove(myUrl)
+  });
 }
 
 export { connect, disconnect };
