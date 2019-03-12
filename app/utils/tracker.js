@@ -36,12 +36,13 @@ async function connect() {
   return docRef
     .get()
     .then(doc => {
+      let peers = [];
       if (!doc.exists) {
         console.log('No such document!');
       } else {
-        const peers = doc.data().url.map(peer => `ws://${peer}`);
-        return peers;
+        peers = doc.data().url.map(peer => `ws://${peer}`);
       }
+      return peers;
     })
     .catch(err => {
       console.log('Error getting document', err);
@@ -56,4 +57,17 @@ async function disconnect() {
   });
 }
 
-export { connect, disconnect };
+async function updatePeer(updater) {
+  docRef.onSnapshot(
+    async docSnapshot => {
+      const peers = docSnapshot.data().url.map(peer => `ws://${peer}`);
+      console.log(`Received peers: ${peers}`);
+      updater(peers);
+    },
+    err => {
+      console.log(`Encountered error: ${err}`);
+    }
+  );
+}
+
+export { connect, disconnect, updatePeer };

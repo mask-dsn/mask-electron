@@ -15,7 +15,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import IPFS from 'ipfs';
 import MenuBuilder from './menu';
-import { connect, disconnect } from './utils/tracker';
+import { connect, disconnect, updatePeer } from './utils/tracker';
 import { connectToPeers, initP2PServer } from './utils/blockchain';
 
 export default class AppUpdater {
@@ -61,6 +61,11 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+const updater = peers => {
+  console.log('inside updater, updating peer list');
+  connectToPeers(peers);
+};
 
 app.on('ready', async () => {
   if (
@@ -113,6 +118,8 @@ app.on('ready', async () => {
   // blockchain startup
   connectToPeers(peers);
   initP2PServer();
+
+  updatePeer(updater);
 
   // IPFS
   const node = new IPFS();
