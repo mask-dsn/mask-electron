@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Board.css';
 import routes from '../constants/routes';
-import { Block } from "../utils/blockchain";
+import { Block } from '../utils/blockchain';
+import PostList from './PostList';
 
 type Props = {
   refresh: () => void,
@@ -41,6 +42,7 @@ export default class Board extends Component<Props> {
             Refresh
           </button>
         </div>
+        <PostList />
       </div>
     );
   }
