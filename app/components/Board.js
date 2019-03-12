@@ -1,12 +1,13 @@
 // @flow
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Counter.css';
+import styles from './Board.css';
 import routes from '../constants/routes';
+import { Block } from "../utils/blockchain";
 
 type Props = {
   refresh: () => void,
-  chain: string
+  chain: Block[]
 };
 
 export default class Board extends Component<Props> {
@@ -21,8 +22,14 @@ export default class Board extends Component<Props> {
             <i className="fa fa-arrow-left fa-3x" />
           </Link>
         </div>
-        <div className={`board ${styles.counter}`} data-tid="chain">
-          {chain}
+        <div className={`index ${styles.index}`} data-tid="index">
+          Index: {chain[0].index}
+        </div>
+        <div className={`timestamp ${styles.timestamp}`} data-tid="timestamp">
+          Timestamp: {chain[0].timestamp}
+        </div>
+        <div className={`data ${styles.data}`} data-tid="data">
+          Data: {chain[0].data}
         </div>
         <div className={styles.btnGroup}>
           <button

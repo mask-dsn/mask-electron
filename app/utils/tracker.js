@@ -1,8 +1,8 @@
 import firebase from 'firebase';
 import ngrok from 'ngrok';
 
-const http_port = process.env.HTTP_PORT || 3001;
-const p2p_port = process.env.P2P_PORT || 6001;
+// const httpPort = process.env.HTTP_PORT || 3001;
+const p2pPort = process.env.P2P_PORT || 6001;
 const firebaseConfig = {
   apiKey: 'AIzaSyAY5bhwqUUDd0bybwqGDeb0LPZTRSdC3kY',
   authDomain: 'dsn-tracker.firebaseapp.com',
@@ -14,24 +14,46 @@ const firebaseConfig = {
 const collectionName = 'tracker';
 const documentName = 'peer';
 
+let myUrl;
+let docRef;
+
 async function connect() {
-  let url = await ngrok.connect(p2p_port);
-  url = url.replace(/^https?:\/\//, '');
-  console.log(`ngrok URL: ${url}`);
+  const url = await ngrok.connect(p2pPort);
+  myUrl = url.replace(/^https?:\/\//, '');
+  console.log(`my ngrok URL: ${url}`);
 
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+  const firestore = firebase.firestore();
+  docRef = firestore.collection(collectionName).doc(documentName);
 
-  const docRef = db.collection(collectionName).doc(documentName);
-  const newPeers = docRef.update({
-    url: firebase.firestore.FieldValue.arrayUnion(url)
+  // write my ngrok url to tracker
+  docRef.update({
+    url: firebase.firestore.FieldValue.arrayUnion(myUrl)
   });
+
+  // read peers from tracker
+  return docRef
+    .get()
+    .then(doc => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        const peers = doc.data().url.map(peer => `ws://${peer}`);
+        return peers;
+      }
+    })
+    .catch(err => {
+      console.log('Error getting document', err);
+    });
 }
 
 async function disconnect() {
   await ngrok.disconnect(); // stops all
   await ngrok.kill(); // kills ngrok process
+  await docRef.update({
+    url: firebase.firestore.FieldValue.arrayRemove(myUrl)
+  });
 }
 
 export { connect, disconnect };
