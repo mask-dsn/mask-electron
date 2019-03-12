@@ -51,3 +51,4 @@ main.js.map
 npm-debug.log.*
 
 .ipfs
+.cache
