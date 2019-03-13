@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styles from './Board.css';
 import routes from '../constants/routes';
 import { Block } from "../utils/blockchain";
+import Postbox from './Postbox';
 
 type Props = {
   refresh: () => void,
@@ -22,6 +23,9 @@ export default class Board extends Component<Props> {
             <i className="fa fa-arrow-left fa-3x" />
           </Link>
         </div>
+
+        <Postbox></Postbox>
+
         <div className={`index ${styles.index}`} data-tid="index">
           Index: {chain[0].index}
         </div>
