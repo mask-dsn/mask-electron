@@ -1,3 +1,12 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-shadow */
+/* eslint-disable default-case */
+/* eslint-disable import/no-mutable-exports */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable camelcase */
+/* eslint-disable no-var */
+/* eslint-disable vars-on-top */
 const CryptoJS = require('crypto-js');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -68,7 +77,7 @@ const initP2PServer = () => {
 };
 
 var initConnection = ws => {
-  sockets.push(ws);
+  sockets.push(ws.url);
   initMessageHandler(ws);
   initErrorHandler(ws);
   write(ws, queryChainLengthMsg());
@@ -235,7 +244,15 @@ var responseLatestMsg = () => ({
   data: JSON.stringify([getLatestBlock()])
 });
 
+var postNewBlock = blockData => {
+  const newBlock = generateNextBlock(blockData);
+  addBlock(newBlock);
+  console.log(sockets);
+  broadcast(responseLatestMsg());
+  console.log(`block added: ${JSON.stringify(newBlock)}`);
+};
+
 var write = (ws, message) => ws.send(JSON.stringify(message));
 var broadcast = message => sockets.forEach(socket => write(socket, message));
 
-export { connectToPeers, initHttpServer, initP2PServer, Block, blockchain };
+export { connectToPeers, initHttpServer, initP2PServer, Block, blockchain, postNewBlock };

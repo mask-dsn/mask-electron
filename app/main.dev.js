@@ -16,7 +16,6 @@ import log from 'electron-log';
 import IPFS from 'ipfs';
 import MenuBuilder from './menu';
 import { connect, disconnect } from './utils/tracker';
-import { connectToPeers, initP2PServer } from './utils/blockchain';
 
 export default class AppUpdater {
   constructor() {
@@ -105,14 +104,6 @@ app.on('ready', async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
-
-  // ngrok
-  const peers = await connect();
-  console.log(peers);
-
-  // blockchain startup
-  connectToPeers(peers);
-  initP2PServer();
 
   // IPFS
   const node = new IPFS();
