@@ -22,10 +22,6 @@ export class Chain {
     this.connectToPeers(peers);
   }
 
-  getBlockchain() {
-    return this.blockchain;
-  }
-
   getGenesisBlock() {
     return new Block(
       0,
@@ -50,7 +46,9 @@ export class Chain {
     });
     app.get('/peers', (req, res) => {
       res.send(
-        this.sockets.map(s => `${s._socket.remoteAddress}:${s._socket.remotePort}`)
+        this.sockets.map(
+          s => `${s._socket.remoteAddress}:${s._socket.remotePort}`
+        )
       );
     });
     app.post('/addPeer', (req, res) => {
@@ -261,7 +259,7 @@ export class Chain {
   }
 
   postNewBlock(usrId, message) {
-    var newPost = new Post(usrId, message, new Date().getTime() / 1000);
+    const newPost = new Post(usrId, message, new Date().getTime() / 1000);
     const newBlock = this.generateNextBlock(newPost);
     this.addBlock(newBlock);
     this.broadcast(this.responseLatestMsg());

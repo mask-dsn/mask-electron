@@ -37,7 +37,7 @@ img {
   width: 100%;
 }
 
-.facebook-box {
+.facebookbox {
   width: 500px;
   margin: 30px auto;
   background: #fff;
@@ -46,7 +46,7 @@ img {
   border-radius: 3px;
 }
 
-.facebook-box .right-icon {
+.facebookbox .righticon {
   float: right;
   display: inline;
   width: 24px;
@@ -55,43 +55,43 @@ img {
   cursor: pointer;
 }
 
-.facebook-box .content {
+.facebookbox .content {
   padding: 12px;
 }
 
-.facebook-box .row.header {
+.facebookbox .row.header {
   max-height: 40px;
   margin-bottom: 11px;
 }
 
-.facebook-box .header .avatar {
+.facebookbox .header .avatar {
   float: left;
   width: 40px;
   height: 40px;
   margin-right: 8px;
 }
 
-.facebook-box .header .name {
+.facebookbox .header .name {
   width: calc(100% - 40px - 8px);
 }
 
-.facebook-box .header .name h5 {
+.facebookbox .header .name h5 {
   margin-bottom: 2px;
   font-weight: 700;
   font-size: 14px;
 }
 
-.facebook-box .header .name span {
+.facebookbox .header .name span {
   color: #9197a3;
   font-size: 12px;
 }
 
-.facebook-box .thumbnail {
+.facebookbox .thumbnail {
   margin-top: 10px;
   margin-left: -1px;
 }
 
-.facebook-box .footer {
+.facebookbox .footer {
   border-top: 1px solid #e1e2e3;
   margin: 0;
   padding: 9px 12px 7px 12px;
@@ -102,24 +102,28 @@ img {
   overflow: hidden;
 }
 
-.facebook-box .footer .row {
+.facebookbox .footer .row {
   margin-top: 10px;
   margin-bottom: 2px;
   overflow: hidden;
 }
 
-.facebook-box .footer .small-avatar {
+.facebookbox .footer .smallavatar {
   width: 32px;
   height: 32px;
   float: left;
   margin-right: 8px;
 }
 
-.facebook-box .footer .write-comment input[type='text'] {
+.facebookbox .footer .writecomment input[type='text'] {
   background: #fff;
   border: 1px solid #dcdee3;
   padding: 7px 7px 7px 5px;
   min-height: 16px;
   width: calc(100% - 32px - 22px);
   float: left;
+}
+
+.text {
+  color: black;
 }

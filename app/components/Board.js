@@ -12,7 +12,7 @@ export default class Board extends Component {
     super(props);
     this.state = {
       peers: [],
-      chainObj: {}
+      chainObj: { blockchain: [] }
     };
     this.refresh = this.refresh.bind(this);
   }
@@ -46,7 +46,7 @@ export default class Board extends Component {
             Refresh
           </button>
         </div>
-        <PostList chain={chain} />
+        <PostList chainObj={this.state.chainObj} />
       </div>
     );
   }
