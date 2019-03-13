@@ -1,8 +1,9 @@
+/* eslint-disable import/prefer-default-export */
 const CryptoJS = require('crypto-js');
 
 export class Post {
-  constructor(usrId, message, timestamp) {
-    this.usrId = usrId;
+  constructor(user, message, timestamp) {
+    this.user = user;
     this.message = message;
     this.timestamp = timestamp;
   }
