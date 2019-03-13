@@ -42,7 +42,7 @@ export default class Board extends Component<Props> {
             Refresh
           </button>
         </div>
-        <PostList />
+        <PostList chain={chain} />
       </div>
     );
   }

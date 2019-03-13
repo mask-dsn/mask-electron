@@ -1,19 +1,15 @@
-// @flow
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import styles from './PostList.css';
-import routes from '../constants/routes';
-import { Block } from '../utils/blockchain';
+import Feed from './Feed';
 
-type Props = {};
-
-export default class PostList extends Component<Props> {
-  props: Props;
-
+export default class PostList extends Component {
   render() {
     return (
       <div>
-        <h1>list</h1>
+        <ul>
+          {this.props.chain.map((block, index) => (
+            <Feed data={block.data} key={index} />
+          ))}
+        </ul>
       </div>
     );
   }
