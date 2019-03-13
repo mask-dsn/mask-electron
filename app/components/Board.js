@@ -27,12 +27,6 @@ export default class Board extends Component {
   render() {
     return (
       <div>
-        <div className={styles.backButton} data-tid="backButton">
-          <Link to={routes.HOME}>
-            <i className="fa fa-arrow-left fa-3x" />
-          </Link>
-        </div>
-
         <Postbox usrId={666} chainObj={this.state.chainObj} />
 
         <div className={styles.btnGroup}>
