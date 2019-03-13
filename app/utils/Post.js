@@ -1,6 +1,6 @@
 const CryptoJS = require('crypto-js');
 
-class Post {
+export class Post {
   constructor(usrId, message, timestamp) {
     this.usrId = usrId;
     this.message = message;
@@ -13,5 +13,3 @@ class Post {
     return id;
   }
 }
-
-export { Post as default };

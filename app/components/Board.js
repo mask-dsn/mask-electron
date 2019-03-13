@@ -1,20 +1,30 @@
-// @flow
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Board.css';
 import routes from '../constants/routes';
-import { Block } from "../utils/blockchain";
+import Postbox from './Postbox';
+import { Chain } from '../utils/Chain';
+import { connect } from '../utils/tracker';
 
-type Props = {
-  refresh: () => void,
-  chain: Block[]
-};
+export default class Board extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      peers: [],
+      chainObj: {}
+    };
+    this.refresh = this.refresh.bind(this);
+  }
 
-export default class Board extends Component<Props> {
-  props: Props;
+  componentDidMount() {
+    connect().then(peers => {
+      this.setState({ peers, chainObj: new Chain(peers) });
+    });
+  }
+
+  refresh() {}
 
   render() {
-    const { refresh, chain } = this.props;
     return (
       <div>
         <div className={styles.backButton} data-tid="backButton">
@@ -22,19 +32,13 @@ export default class Board extends Component<Props> {
             <i className="fa fa-arrow-left fa-3x" />
           </Link>
         </div>
-        <div className={`index ${styles.index}`} data-tid="index">
-          Index: {chain[0].index}
-        </div>
-        <div className={`timestamp ${styles.timestamp}`} data-tid="timestamp">
-          Timestamp: {chain[0].timestamp}
-        </div>
-        <div className={`data ${styles.data}`} data-tid="data">
-          Data: {chain[0].data}
-        </div>
+
+        <Postbox usrId={666} chainObj={this.state.chainObj} />
+
         <div className={styles.btnGroup}>
           <button
             className={styles.btn}
-            onClick={refresh}
+            onClick={this.refresh}
             data-tclass="btn"
             type="button"
           >

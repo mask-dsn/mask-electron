@@ -77,7 +77,7 @@ const initP2PServer = () => {
 };
 
 var initConnection = ws => {
-  sockets.push(ws);
+  sockets.push(ws.url);
   initMessageHandler(ws);
   initErrorHandler(ws);
   write(ws, queryChainLengthMsg());
@@ -244,7 +244,15 @@ var responseLatestMsg = () => ({
   data: JSON.stringify([getLatestBlock()])
 });
 
+var postNewBlock = blockData => {
+  const newBlock = generateNextBlock(blockData);
+  addBlock(newBlock);
+  console.log(sockets);
+  broadcast(responseLatestMsg());
+  console.log(`block added: ${JSON.stringify(newBlock)}`);
+};
+
 var write = (ws, message) => ws.send(JSON.stringify(message));
 var broadcast = message => sockets.forEach(socket => write(socket, message));
 
-export { connectToPeers, initHttpServer, initP2PServer, Block, blockchain };
+export { connectToPeers, initHttpServer, initP2PServer, Block, blockchain, postNewBlock };
