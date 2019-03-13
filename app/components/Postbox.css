@@ -1,10 +1,10 @@
 section {
-  width: 90%;
+  width: 100%;
   float: middle;
 }
 section div {
   width: 555px;
-  margin: 20px auto;
+  margin: 50px auto;
   background-color: #fff;
   overflow: hidden;
   padding: 20px;

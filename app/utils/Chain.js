@@ -183,7 +183,7 @@ export class Chain {
       );
       if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
         console.log('We can append the received block to our chain');
-        blockchain.push(latestBlockReceived);
+        this.blockchain.push(latestBlockReceived);
         this.broadcast(this.responseLatestMsg());
       } else if (receivedBlocks.length === 1) {
         console.log('We have to query the chain from our peer');
