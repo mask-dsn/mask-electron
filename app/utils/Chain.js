@@ -5,10 +5,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const WebSocket = require('ws');
 
+const MessageType = {
+  QUERY_LATEST: 0,
+  QUERY_ALL: 1,
+  RESPONSE_BLOCKCHAIN: 2
+};
+const http_port = process.env.HTTP_PORT || 3001;
+const p2p_port = process.env.P2P_PORT || 6001;
+
 export class Chain {
-  constructor() {
-    this.blockchain = [getGenesisBlock()];
+  constructor(peers) {
+    this.blockchain = [this.getGenesisBlock()];
     this.sockets = [];
+    this.initP2PServer();
+    this.connectToPeers(peers);
   }
 
   getGenesisBlock() {
@@ -27,9 +37,9 @@ export class Chain {
 
     app.get('/blocks', (req, res) => res.send(JSON.stringify(blockchain)));
     app.post('/mineBlock', (req, res) => {
-      const newBlock = generateNextBlock(req.body.data);
-      addBlock(newBlock);
-      broadcast(responseLatestMsg());
+      const newBlock = this.generateNextBlock(req.body.data);
+      this.addBlock(newBlock);
+      this.broadcast(this.responseLatestMsg());
       console.log(`block added: ${JSON.stringify(newBlock)}`);
       res.send();
     });
@@ -39,7 +49,7 @@ export class Chain {
       );
     });
     app.post('/addPeer', (req, res) => {
-      connectToPeers([req.body.peer]);
+      this.connectToPeers([req.body.peer]);
       res.send();
     });
     app.listen(http_port, () =>
@@ -49,15 +59,15 @@ export class Chain {
 
   initP2PServer() {
     const server = new WebSocket.Server({ port: p2p_port });
-    server.on('connection', ws => initConnection(ws));
+    server.on('connection', ws => this.initConnection(ws));
     console.log(`listening websocket p2p port on: ${p2p_port}`);
   }
 
   initConnection(ws) {
-    sockets.push(ws.url);
-    initMessageHandler(ws);
-    initErrorHandler(ws);
-    write(ws, queryChainLengthMsg());
+    this.sockets.push(ws);
+    this.initMessageHandler(ws);
+    this.initErrorHandler(ws);
+    this.write(ws, this.queryChainLengthMsg());
   }
 
   initMessageHandler(ws) {
@@ -66,13 +76,13 @@ export class Chain {
       console.log(`Received message${JSON.stringify(message)}`);
       switch (message.type) {
         case MessageType.QUERY_LATEST:
-          write(ws, responseLatestMsg());
+          this.write(ws, this.responseLatestMsg());
           break;
         case MessageType.QUERY_ALL:
-          write(ws, responseChainMsg());
+          this.write(ws, this.responseChainMsg());
           break;
         case MessageType.RESPONSE_BLOCKCHAIN:
-          handleBlockchainResponse(message);
+          this.handleBlockchainResponse(message);
           break;
       }
     });
@@ -81,17 +91,17 @@ export class Chain {
   initErrorHandler(ws) {
     const closeConnection = ws => {
       console.log(`connection failed to peer: ${ws.url}`);
-      sockets.splice(sockets.indexOf(ws), 1);
+      this.sockets.splice(this.sockets.indexOf(ws), 1);
     };
     ws.on('close', () => closeConnection(ws));
     ws.on('error', () => closeConnection(ws));
   }
 
   generateNextBlock(blockData) {
-    const previousBlock = getLatestBlock();
+    const previousBlock = this.getLatestBlock();
     const nextIndex = previousBlock.index + 1;
     const nextTimestamp = new Date().getTime() / 1000;
-    const nextHash = calculateHash(
+    const nextHash = this.calculateHash(
       nextIndex,
       previousBlock.hash,
       nextTimestamp,
@@ -107,7 +117,7 @@ export class Chain {
   }
 
   calculateHashForBlock(block) {
-    return calculateHash(
+    return this.calculateHash(
       block.index,
       block.previousHash,
       block.timestamp,
@@ -120,8 +130,8 @@ export class Chain {
   }
 
   addBlock(newBlock) {
-    if (isValidNewBlock(newBlock, getLatestBlock())) {
-      blockchain.push(newBlock);
+    if (this.isValidNewBlock(newBlock, this.getLatestBlock())) {
+      this.blockchain.push(newBlock);
     }
   }
 
@@ -134,12 +144,12 @@ export class Chain {
       console.log('invalid previoushash');
       return false;
     }
-    if (calculateHashForBlock(newBlock) !== newBlock.hash) {
+    if (this.calculateHashForBlock(newBlock) !== newBlock.hash) {
       console.log(
-        `${typeof newBlock.hash} ${typeof calculateHashForBlock(newBlock)}`
+        `${typeof newBlock.hash} ${typeof this.calculateHashForBlock(newBlock)}`
       );
       console.log(
-        `invalid hash: ${calculateHashForBlock(newBlock)} ${newBlock.hash}`
+        `invalid hash: ${this.calculateHashForBlock(newBlock)} ${newBlock.hash}`
       );
       return false;
     }
@@ -149,7 +159,7 @@ export class Chain {
   connectToPeers(newPeers) {
     newPeers.forEach(peer => {
       const ws = new WebSocket(peer);
-      ws.on('open', () => initConnection(ws));
+      ws.on('open', () => this.initConnection(ws));
       ws.on('error', () => {
         console.log('connection failed');
       });
@@ -161,7 +171,7 @@ export class Chain {
       (b1, b2) => b1.index - b2.index
     );
     const latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];
-    const latestBlockHeld = getLatestBlock();
+    const latestBlockHeld = this.getLatestBlock();
     if (latestBlockReceived.index > latestBlockHeld.index) {
       console.log(
         `blockchain possibly behind. We got: ${
@@ -171,13 +181,13 @@ export class Chain {
       if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
         console.log('We can append the received block to our chain');
         blockchain.push(latestBlockReceived);
-        broadcast(responseLatestMsg());
+        this.broadcast(this.responseLatestMsg());
       } else if (receivedBlocks.length === 1) {
         console.log('We have to query the chain from our peer');
-        broadcast(queryAllMsg());
+        this.broadcast(this.queryAllMsg());
       } else {
         console.log('Received blockchain is longer than current blockchain');
-        replaceChain(receivedBlocks);
+        this.replaceChain(receivedBlocks);
       }
     } else {
       console.log(
@@ -187,12 +197,15 @@ export class Chain {
   }
 
   replaceChain(newBlocks) {
-    if (isValidChain(newBlocks) && newBlocks.length > blockchain.length) {
+    if (
+      this.isValidChain(newBlocks) &&
+      newBlocks.length > this.blockchain.length
+    ) {
       console.log(
         'Received blockchain is valid. Replacing current blockchain with received blockchain'
       );
-      blockchain = newBlocks;
-      broadcast(responseLatestMsg());
+      this.blockchain = newBlocks;
+      this.broadcast(this.responseLatestMsg());
     } else {
       console.log('Received blockchain invalid');
     }
@@ -201,13 +214,13 @@ export class Chain {
   isValidChain(blockchainToValidate) {
     if (
       JSON.stringify(blockchainToValidate[0]) !==
-      JSON.stringify(getGenesisBlock())
+      JSON.stringify(this.getGenesisBlock())
     ) {
       return false;
     }
     const tempBlocks = [blockchainToValidate[0]];
     for (let i = 1; i < blockchainToValidate.length; i++) {
-      if (isValidNewBlock(blockchainToValidate[i], tempBlocks[i - 1])) {
+      if (this.isValidNewBlock(blockchainToValidate[i], tempBlocks[i - 1])) {
         tempBlocks.push(blockchainToValidate[i]);
       } else {
         return false;
@@ -217,7 +230,7 @@ export class Chain {
   }
 
   getLatestBlock() {
-    return blockchain[blockchain.length - 1];
+    return this.blockchain[this.blockchain.length - 1];
   }
 
   queryChainLengthMsg() {
@@ -231,22 +244,22 @@ export class Chain {
   responseChainMsg() {
     return {
       type: MessageType.RESPONSE_BLOCKCHAIN,
-      data: JSON.stringify(blockchain)
+      data: JSON.stringify(this.blockchain)
     };
   }
 
   responseLatestMsg() {
     return {
       type: MessageType.RESPONSE_BLOCKCHAIN,
-      data: JSON.stringify([getLatestBlock()])
+      data: JSON.stringify([this.getLatestBlock()])
     };
   }
 
   postNewBlock(blockData) {
-    const newBlock = generateNextBlock(blockData);
-    addBlock(newBlock);
-    console.log(sockets);
-    broadcast(responseLatestMsg());
+    const newBlock = this.generateNextBlock(blockData);
+    this.addBlock(newBlock);
+    console.log(this.sockets);
+    this.broadcast(this.responseLatestMsg());
     console.log(`block added: ${JSON.stringify(newBlock)}`);
   }
 
@@ -255,6 +268,6 @@ export class Chain {
   }
 
   broadcast(message) {
-    sockets.forEach(socket => write(socket, message));
+    this.sockets.forEach(socket => this.write(socket, message));
   }
 }
