@@ -33,7 +33,7 @@ export default class Board extends Component {
           </Link>
         </div>
 
-        <Postbox chainObj={this.state.chainObj} />
+        <Postbox usrId={666} chainObj={this.state.chainObj} />
 
         <div className={styles.btnGroup}>
           <button

@@ -7,6 +7,7 @@ export default class Postbox extends Component {
     super(props);
     this.state = { postContent: '' };
     this.chainObj = this.props.chainObj;
+    this.usrId = this.props.usrId;
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePost = this.handlePost.bind(this);
@@ -18,7 +19,8 @@ export default class Postbox extends Component {
 
   handlePost(event) {
     console.log(`Posting data: ${this.state.postContent}`);
-    this.props.chainObj.postNewBlock(this.state.postContent);
+    this.props.chainObj.postNewBlock(this.usrId, this.state.postContent);
+    event.preventDefault();
   }
 
   render() {

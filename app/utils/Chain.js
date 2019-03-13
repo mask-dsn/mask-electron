@@ -1,4 +1,5 @@
 import { Block } from './Block';
+import { Post } from './Post';
 
 const CryptoJS = require('crypto-js');
 const express = require('express');
@@ -21,12 +22,16 @@ export class Chain {
     this.connectToPeers(peers);
   }
 
+  getBlockchain() {
+    return this.blockchain;
+  }
+
   getGenesisBlock() {
     return new Block(
       0,
       '0',
       1465154705,
-      'my genesis block!!',
+      new Post(0, 'Gensis Block', 1465154705),
       '816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7'
     );
   }
@@ -35,7 +40,7 @@ export class Chain {
     const app = express();
     app.use(bodyParser.json());
 
-    app.get('/blocks', (req, res) => res.send(JSON.stringify(blockchain)));
+    app.get('/blocks', (req, res) => res.send(JSON.stringify(this.blockchain)));
     app.post('/mineBlock', (req, res) => {
       const newBlock = this.generateNextBlock(req.body.data);
       this.addBlock(newBlock);
@@ -45,7 +50,7 @@ export class Chain {
     });
     app.get('/peers', (req, res) => {
       res.send(
-        sockets.map(s => `${s._socket.remoteAddress}:${s._socket.remotePort}`)
+        this.sockets.map(s => `${s._socket.remoteAddress}:${s._socket.remotePort}`)
       );
     });
     app.post('/addPeer', (req, res) => {
@@ -97,7 +102,7 @@ export class Chain {
     ws.on('error', () => closeConnection(ws));
   }
 
-  generateNextBlock(blockData) {
+  generateNextBlock(newPost) {
     const previousBlock = this.getLatestBlock();
     const nextIndex = previousBlock.index + 1;
     const nextTimestamp = new Date().getTime() / 1000;
@@ -105,13 +110,13 @@ export class Chain {
       nextIndex,
       previousBlock.hash,
       nextTimestamp,
-      blockData
+      newPost
     );
     return new Block(
       nextIndex,
       previousBlock.hash,
       nextTimestamp,
-      blockData,
+      newPost,
       nextHash
     );
   }
@@ -121,7 +126,7 @@ export class Chain {
       block.index,
       block.previousHash,
       block.timestamp,
-      block.data
+      block.post
     );
   }
 
@@ -255,10 +260,10 @@ export class Chain {
     };
   }
 
-  postNewBlock(blockData) {
-    const newBlock = this.generateNextBlock(blockData);
+  postNewBlock(usrId, message) {
+    var newPost = new Post(usrId, message, new Date().getTime() / 1000);
+    const newBlock = this.generateNextBlock(newPost);
     this.addBlock(newBlock);
-    console.log(this.sockets);
     this.broadcast(this.responseLatestMsg());
     console.log(`block added: ${JSON.stringify(newBlock)}`);
   }
