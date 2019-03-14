@@ -15,7 +15,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import IPFS from 'ipfs';
 import MenuBuilder from './menu';
-import { connect, disconnect } from './utils/tracker';
+import { disconnect } from './utils/tracker';
+import { startUp } from './utils/startup';
 
 export default class AppUpdater {
   constructor() {
@@ -105,23 +106,25 @@ app.on('ready', async () => {
   // eslint-disable-next-line
   new AppUpdater();
 
+  const chain = await startUp();
+
   // IPFS
-  const node = new IPFS();
+  // const node = new IPFS();
 
-  node.on('ready', async () => {
-    const version = await node.version();
+  // node.on('ready', async () => {
+  //   const version = await node.version();
 
-    console.log('Version:', version.version);
+  //   console.log('Version:', version.version);
 
-    const filesAdded = await node.add({
-      path: 'hello.txt',
-      content: Buffer.from('Hello World 101')
-    });
+  //   const filesAdded = await node.add({
+  //     path: 'hello.txt',
+  //     content: Buffer.from('Hello World 101')
+  //   });
 
-    console.log('Added file:', filesAdded[0].path, filesAdded[0].hash);
+  //   console.log('Added file:', filesAdded[0].path, filesAdded[0].hash);
 
-    const fileBuffer = await node.cat(filesAdded[0].hash);
+  //   const fileBuffer = await node.cat(filesAdded[0].hash);
 
-    console.log('Added file contents:', fileBuffer.toString());
-  });
+  //   console.log('Added file contents:', fileBuffer.toString());
+  // });
 });

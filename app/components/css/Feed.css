@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+body {
+  background: #e9eaed;
+  font-family: helvetica, arial, sans-serif;
+  color: #141823 !important;
+  font-size: 14px;
+  line-height: 1.38;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 13px;
+  color: #141823;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #3b5998 !important;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+hr {
+  line-height: 1px;
+  height: 1px;
+  color: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.1);
+  border: 0;
+}
+
+img {
+  width: 100%;
+}
+
+.facebookbox {
+  width: 600px;
+  margin: 30px auto;
+  background: #fff;
+  border: 1px solid;
+  border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+  border-radius: 3px;
+}
+
+.facebookbox .righticon {
+  float: right;
+  display: inline;
+  width: 24px;
+  height: 24px;
+  color: #eee;
+  cursor: pointer;
+}
+
+.facebookbox .content {
+  padding: 12px;
+}
+
+.facebookbox .row.header {
+  max-height: 40px;
+  margin-bottom: 11px;
+}
+
+.facebookbox .header .avatar {
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+}
+
+.facebookbox .header .name {
+  width: calc(100% - 40px - 8px);
+}
+
+.facebookbox .header .name h5 {
+  margin-bottom: 2px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.facebookbox .header .name span {
+  color: #9197a3;
+  font-size: 12px;
+}
+
+.facebookbox .thumbnail {
+  margin-top: 10px;
+  margin-left: -1px;
+}
+
+.facebookbox .footer {
+  border-top: 1px solid #e1e2e3;
+  margin: 0;
+  padding: 9px 12px 7px 12px;
+  font-size: 12px;
+  background-color: #f6f7f8;
+  border-radius: 0 0 3px 3px;
+  color: #141823;
+  overflow: hidden;
+}
+
+.facebookbox .footer .row {
+  margin-top: 10px;
+  margin-bottom: 2px;
+  overflow: hidden;
+}
+
+.facebookbox .footer .smallavatar {
+  width: 32px;
+  height: 32px;
+  float: left;
+  margin-right: 8px;
+}
+
+.facebookbox .footer .writecomment input[type='text'] {
+  background: #fff;
+  border: 1px solid #dcdee3;
+  padding: 7px 7px 7px 5px;
+  min-height: 16px;
+  width: calc(100% - 32px - 22px);
+  float: left;
+}
