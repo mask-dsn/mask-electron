@@ -20,8 +20,8 @@ export default class Board extends Component {
 
   handleRefresh() {
     axios.get('http://localhost:3001/blocks').then(res => {
-      console.log(res);
-      this.setState({ chain: res.data });
+      const chain = res.data.reverse();
+      this.setState({ chain });
     });
   }
 
