@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import style from './css/Feed.css';
+import { getDateFromTimestamp } from '../utils/timestampUtil';
 
 export default class Feed extends Component {
   render() {
+    const userId = this.props.post.userId;
+    const message = this.props.post.message;
+    const timestamp = getDateFromTimestamp(this.props.post.timestamp);
+
     return (
       <div className={style.facebookbox}>
         <div className={style.content}>
@@ -14,17 +19,11 @@ export default class Feed extends Component {
               <img src="http://placehold.it/40x40" alt="" />
             </div>
             <div className={style.name}>
-              <h5>
-                <a href="http://khoipro.com" target="_blank">
-                  Khoi Nguyen
-                </a>
-              </h5>
-              <span className={style.sub}>10 October 2015 at 15:00</span>
+              <h5>{userId}</h5>
+              <span className={style.sub}>{timestamp}</span>
             </div>
           </div>
-          <div className={`${style.row} ${style.text}`}>
-            {this.props.post.message}
-          </div>
+          <div className={`${style.row} ${style.text}`}>{message}</div>
           <hr />
         </div>
         <div className={style.footer}>
