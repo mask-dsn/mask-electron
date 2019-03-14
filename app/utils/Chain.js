@@ -18,6 +18,7 @@ export class Chain {
   constructor(peers) {
     this.blockchain = [this.getGenesisBlock()];
     this.sockets = [];
+    this.initHttpServer();
     this.initP2PServer();
     this.connectToPeers(peers);
   }
@@ -38,7 +39,7 @@ export class Chain {
 
     app.get('/blocks', (req, res) => res.send(JSON.stringify(this.blockchain)));
     app.post('/mineBlock', (req, res) => {
-      const newBlock = this.generateNextBlock(req.body.data);
+      const newBlock = this.generateNextBlock(req.body);
       this.addBlock(newBlock);
       this.broadcast(this.responseLatestMsg());
       console.log(`block added: ${JSON.stringify(newBlock)}`);
@@ -170,9 +171,25 @@ export class Chain {
   }
 
   handleBlockchainResponse(message) {
-    const receivedBlocks = JSON.parse(message.data).sort(
+    const receivedBlocksJson = JSON.parse(message.data).sort(
       (b1, b2) => b1.index - b2.index
     );
+    const receivedBlocks = [];
+    receivedBlocksJson.forEach(element => {
+      const elementPost = new Post(
+        element.post.userId,
+        element.post.message,
+        element.post.timestamp
+      );
+      const elementBlock = new Block(
+        element.index,
+        element.previousHash,
+        element.timestamp,
+        elementPost,
+        element.hash
+      );
+      receivedBlocks.push(elementBlock);
+    });
     const latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];
     const latestBlockHeld = this.getLatestBlock();
     if (latestBlockReceived.index > latestBlockHeld.index) {
@@ -258,8 +275,8 @@ export class Chain {
     };
   }
 
-  postNewBlock(usrId, message) {
-    const newPost = new Post(usrId, message, new Date().getTime() / 1000);
+  postNewBlock(userId, message) {
+    const newPost = new Post(userId, message, new Date().getTime() / 1000);
     const newBlock = this.generateNextBlock(newPost);
     this.addBlock(newBlock);
     this.broadcast(this.responseLatestMsg());

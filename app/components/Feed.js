@@ -3,7 +3,6 @@ import style from './css/Feed.css';
 
 export default class Feed extends Component {
   render() {
-    const post = this.props.post;
     return (
       <div className={style.facebookbox}>
         <div className={style.content}>
@@ -23,9 +22,8 @@ export default class Feed extends Component {
               <span className={style.sub}>10 October 2015 at 15:00</span>
             </div>
           </div>
-          <div className={`${style.row} ${style.text}`}>{post.message}</div>
-          <div className={`${style.row} ${style.thumbnail}`}>
-            <img src="http://placehold.it/600x350" alt="" />
+          <div className={`${style.row} ${style.text}`}>
+            {this.props.post.message}
           </div>
           <hr />
         </div>

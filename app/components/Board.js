@@ -1,46 +1,49 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Board.css';
+import axios from 'axios';
+import styles from './css/Board.css';
 import routes from '../constants/routes';
-import PostList from './PostList';
 import Postbox from './Postbox';
-import { Chain } from '../utils/Chain';
-import { connect } from '../utils/tracker';
+import Feed from './Feed';
 
 export default class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      peers: [],
-      chainObj: { blockchain: [] }
+      chain: []
     };
-    this.refresh = this.refresh.bind(this);
+
+    this.handleRefresh = this.handleRefresh.bind(this);
+
+    this.handleRefresh();
   }
 
-  componentDidMount() {
-    connect().then(peers => {
-      this.setState({ peers, chainObj: new Chain(peers) });
+  handleRefresh() {
+    axios.get('http://localhost:3001/blocks').then(res => {
+      console.log(res);
+      this.setState({ chain: res.data });
     });
   }
-
-  refresh() {}
 
   render() {
     return (
       <div>
-        <Postbox usrId={666} chainObj={this.state.chainObj} />
-
+        <Postbox userId={666} refresh={this.handleRefresh} />
         <div className={styles.btnGroup}>
           <button
             className={styles.btn}
-            onClick={this.refresh}
+            onClick={this.handleRefresh}
             data-tclass="btn"
             type="button"
           >
             Refresh
           </button>
         </div>
-        <PostList chainObj={this.state.chainObj} />
+        <div className={styles.scrollbox}>
+          {this.state.chain.map((block, index) => (
+            <Feed key={index} post={block.post} />
+          ))}
+        </div>
       </div>
     );
   }
