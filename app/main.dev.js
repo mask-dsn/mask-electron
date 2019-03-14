@@ -69,11 +69,6 @@ app.on('window-all-closed', () => {
   saveChain(callback);
 });
 
-const updater = peers => {
-  console.log('inside updater, updating peer list');
-  connectToPeers(peers);
-};
-
 app.on('ready', async () => {
   if (
     process.env.NODE_ENV === 'development' ||
@@ -119,8 +114,6 @@ app.on('ready', async () => {
   new AppUpdater();
 
   const chain = await startUp();
-
-  updatePeer(updater);
 
   // IPFS
   // const node = new IPFS();
