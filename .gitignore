@@ -52,5 +52,3 @@ npm-debug.log.*
 
 **/.ipfs
 **/.cache
-
-**/*.json
