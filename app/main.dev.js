@@ -69,23 +69,10 @@ app.on('window-all-closed', () => {
   saveChain(callback);
 });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> b0cb994... listen
 const updater = peers => {
   console.log('inside updater, updating peer list');
   connectToPeers(peers);
 };
-<<<<<<< HEAD
-=======
-// const updater = peers => {
-//   console.log('inside updater, updating peer list');
-//   connectToPeers(peers);
-// };
->>>>>>> 55bb3f4... resolve conflicts
-=======
->>>>>>> b0cb994... listen
 
 app.on('ready', async () => {
   if (

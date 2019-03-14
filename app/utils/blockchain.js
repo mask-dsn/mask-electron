@@ -17,23 +17,9 @@ const http_port = process.env.HTTP_PORT || 3001;
 const p2p_port = process.env.P2P_PORT || 6001;
 const initialPeers = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 const savedChainPath = __dirname + '/../.cache';
 const cacheFile = "/.blockchain.json";
 
-=======
-const savedChainPath = './blockChainData.json';
->>>>>>> 55bb3f4... resolve conflicts
-=======
-const savedChainPath = __dirname + '/../.cache';
-const cacheFile = "/.blockchain.json";
-
->>>>>>> b74a35b... added save
-=======
-const savedChainPath = './blockChainData.json';
->>>>>>> 72248da... persist-blockchain-on-shutdown
 const fs = require('fs');
 
 class Block {
@@ -311,10 +297,6 @@ export {
   initP2PServer,
   Block,
   blockchain,
-<<<<<<< HEAD
   saveChain,
   postNewBlock
-=======
-  saveChain
->>>>>>> 72248da... persist-blockchain-on-shutdown
 };
