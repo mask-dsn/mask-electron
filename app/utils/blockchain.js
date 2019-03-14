@@ -17,11 +17,6 @@ const http_port = process.env.HTTP_PORT || 3001;
 const p2p_port = process.env.P2P_PORT || 6001;
 const initialPeers = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
-const savedChainPath = __dirname + '/../.cache';
-const cacheFile = "/.blockchain.json";
-
-const fs = require('fs');
-
 class Block {
   constructor(index, previousHash, timestamp, data, hash) {
     this.index = index;
@@ -238,34 +233,6 @@ var isValidChain = blockchainToValidate => {
   return true;
 };
 
-var saveChain = (callback) => {
-  if (!fs.existsSync(savedChainPath)){
-    fs.mkdirSync(savedChainPath);
-  }
-
-  var json = JSON.stringify(blockchain);
-
-  fs.writeFile(savedChainPath + cacheFile, json, 'utf-8', callback);
-};
-
-const getSavedChain = () => {
-  if (!fs.existsSync(savedChainPath)){
-    fs.mkdirSync(savedChainPath);
-  }
-
-  var fileContents;
-  var savedChain;
-
-  try {
-    fileContents = fs.readFileSync(savedChainPath+cacheFile, 'utf-8');
-    savedChain = JSON.parse(fileContents);
-  } catch (err) {
-    savedChain = [getGenesisBlock()];
-  }
-
-  return savedChain;
-};
-
 var getLatestBlock = () => blockchain[blockchain.length - 1];
 var queryChainLengthMsg = () => ({ type: MessageType.QUERY_LATEST });
 var queryAllMsg = () => ({ type: MessageType.QUERY_ALL });
@@ -289,14 +256,11 @@ var postNewBlock = blockData => {
 var write = (ws, message) => ws.send(JSON.stringify(message));
 var broadcast = message => sockets.forEach(socket => write(socket, message));
 
-getSavedChain();
-
 export {
   connectToPeers,
   initHttpServer,
   initP2PServer,
   Block,
   blockchain,
-  saveChain,
   postNewBlock
 };

@@ -17,7 +17,7 @@ import IPFS from 'ipfs';
 import MenuBuilder from './menu';
 import { disconnect } from './utils/tracker';
 import { startUp } from './utils/startup';
-import { saveChain } from './utils/blockchain';
+import { saveChain } from './utils/persistBlockchain';
 
 export default class AppUpdater {
   constructor() {
