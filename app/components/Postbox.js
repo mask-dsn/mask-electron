@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './css/Postbox.css';
 import { Post } from '../utils/Post';
+import Popup from './ImageUploader/Popup';
 
 export default class Postbox extends Component {
   constructor(props) {
     super(props);
-    this.state = { postContent: '', userId: this.props.userId };
+    this.state = { postContent: '', userId: this.props.userId, showPopup: false };
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePost = this.handlePost.bind(this);
+    this.togglePopup = this.togglePopup.bind(this);
   }
 
   handleChange(event) {
@@ -33,6 +35,12 @@ export default class Postbox extends Component {
       });
   }
 
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
+
   render() {
     return (
       <section>
@@ -46,7 +54,14 @@ export default class Postbox extends Component {
             />
             <input type="submit" value="Post" />
           </form>
+          <button className={styles.uploadbtn} onClick={this.togglePopup}>Upload Image</button>
         </div>
+          {this.state.showPopup ?
+            <Popup
+              closePopup={this.togglePopup}
+            />
+            : null
+          }
       </section>
     );
   }
