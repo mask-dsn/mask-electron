@@ -54,6 +54,7 @@
 }
 
 .scrollbox {
-  height: 100%;
+  margin-top: 20px;
+  height: 650px;
   overflow: scroll;
 }
