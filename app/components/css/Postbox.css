@@ -3,13 +3,13 @@ section {
   float: middle;
 }
 section div {
-  width: 555px;
-  margin: 50px auto;
+  width: 560px;
+  margin: 40px auto;
   background-color: #fff;
   overflow: hidden;
   padding: 20px;
   border-radius: 3px;
-  box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   z-index: 3;
   position: relative;
 }
@@ -27,21 +27,21 @@ section div textarea {
   font-family: arial;
   resize: none;
   outline: none;
-  border-bottom: 2px solid #0077CC;
+  border-bottom: 2px solid #0077cc;
 }
 textarea::-webkit-scrollbar {
   width: 0px;
   background-color: transparent;
 }
 textarea::-webkit-scrollbar-thumb {
-  background-color: #CCC;
-  border-radius: 2px
+  background-color: #ccc;
+  border-radius: 2px;
 }
-section div [type = submit] {
+section div [type='submit'] {
   float: right;
   margin: 25px 10px auto 5px;
   border: none;
-  background-color: #0077CC;
+  background-color: #0077cc;
   color: #fff;
   font-weight: bold;
   padding: 10px 15px;
@@ -54,6 +54,6 @@ section div [type = submit] {
   margin: 10px auto;
   padding: 10px;
   color: #333;
-  box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   border-radius: 3px;
 }

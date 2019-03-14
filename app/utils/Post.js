@@ -2,15 +2,15 @@
 const CryptoJS = require('crypto-js');
 
 export class Post {
-  constructor(user, message, timestamp) {
-    this.user = user;
+  constructor(userId, message, timestamp) {
+    this.userId = userId;
     this.message = message;
     this.timestamp = timestamp;
   }
 
-  static getUsrId() {
+  static getUserId() {
     const id = CryptoJS.randomBytes(20).toString('hex');
-    console.log(`read usrId = ${id}`);
+    console.log(`read userId = ${id}`);
     return id;
   }
 }
