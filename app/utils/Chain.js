@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-underscore-dangle */
 import { Block } from './Block';
 import { Post } from './Post';
 
@@ -11,19 +13,20 @@ const MessageType = {
   QUERY_ALL: 1,
   RESPONSE_BLOCKCHAIN: 2
 };
-const http_port = process.env.HTTP_PORT || 3001;
-const p2p_port = process.env.P2P_PORT || 6001;
+const httpPort = process.env.HTTP_PORT || 3001;
+const p2pPort = process.env.P2P_PORT || 6001;
 
-export class Chain {
+export default class Chain {
   constructor(peers, savedChain) {
-    this.blockchain = savedChain.length == 0 ? [this.getGenesisBlock()] : savedChain;
+    this.blockchain =
+      savedChain.length === 0 ? [this.getGenesisBlock()] : savedChain;
     this.sockets = [];
     this.initHttpServer();
     this.initP2PServer();
     this.connectToPeers(peers);
   }
 
-  getGenesisBlock() {
+  static getGenesisBlock() {
     return new Block(
       0,
       '0',
@@ -56,15 +59,15 @@ export class Chain {
       this.connectToPeers([req.body.peer]);
       res.send();
     });
-    app.listen(http_port, () =>
-      console.log(`Listening http on port: ${http_port}`)
+    app.listen(httpPort, () =>
+      console.log(`Listening http on port: ${httpPort}`)
     );
   }
 
   initP2PServer() {
-    const server = new WebSocket.Server({ port: p2p_port });
+    const server = new WebSocket.Server({ port: p2pPort });
     server.on('connection', ws => this.initConnection(ws));
-    console.log(`listening websocket p2p port on: ${p2p_port}`);
+    console.log(`listening websocket p2p port on: ${p2pPort}`);
   }
 
   initConnection(ws) {
@@ -88,14 +91,16 @@ export class Chain {
         case MessageType.RESPONSE_BLOCKCHAIN:
           this.handleBlockchainResponse(message);
           break;
+        default:
+          break;
       }
     });
   }
 
   initErrorHandler(ws) {
-    const closeConnection = ws => {
-      console.log(`connection failed to peer: ${ws.url}`);
-      this.sockets.splice(this.sockets.indexOf(ws), 1);
+    const closeConnection = socket => {
+      console.log(`connection failed to peer: ${socket.url}`);
+      this.sockets.splice(this.sockets.indexOf(socket), 1);
     };
     ws.on('close', () => closeConnection(ws));
     ws.on('error', () => closeConnection(ws));
@@ -129,7 +134,7 @@ export class Chain {
     );
   }
 
-  calculateHash(index, previousHash, timestamp, data) {
+  static calculateHash(index, previousHash, timestamp, data) {
     return CryptoJS.SHA256(index + previousHash + timestamp + data).toString();
   }
 
@@ -253,11 +258,11 @@ export class Chain {
     return this.blockchain[this.blockchain.length - 1];
   }
 
-  queryChainLengthMsg() {
+  static queryChainLengthMsg() {
     return { type: MessageType.QUERY_LATEST };
   }
 
-  queryAllMsg() {
+  static queryAllMsg() {
     return { type: MessageType.QUERY_ALL };
   }
 
@@ -283,7 +288,7 @@ export class Chain {
     console.log(`block added: ${JSON.stringify(newBlock)}`);
   }
 
-  write(ws, message) {
+  static write(ws, message) {
     ws.send(JSON.stringify(message));
   }
 
