@@ -17,6 +17,10 @@ const documentName = 'peer';
 let myUrl;
 let docRef;
 
+function appendWs(peer) {
+  return `ws://${peer}`;
+}
+
 async function connect() {
   const url = await ngrok.connect(p2pPort);
   myUrl = url.replace(/^https?:\/\//, '');
@@ -40,7 +44,7 @@ async function connect() {
       if (!doc.exists) {
         console.log('No such document!');
       } else {
-        peers = doc.data().url.map(peer => `ws://${peer}`);
+        peers = doc.data().url.map(appendWs);
       }
       return peers;
     })
@@ -60,7 +64,7 @@ async function disconnect() {
 async function updatePeer(updater) {
   docRef.onSnapshot(
     async docSnapshot => {
-      const peers = docSnapshot.data().url.map(peer => `ws://${peer}`);
+      const peers = docSnapshot.data().url.map(appendWs);
       console.log(`Received peers: ${peers}`);
       updater(peers);
     },
