@@ -3,6 +3,9 @@ import style from './css/Feed.css';
 import { getDateFromTimestamp } from '../utils/timestampUtil';
 
 export default class Feed extends Component {
+  constructor(props){
+    super(props);
+  }
   render() {
     const userId = this.props.post.userId;
     const message = this.props.post.message;
@@ -24,6 +27,11 @@ export default class Feed extends Component {
             </div>
           </div>
           <div className={`${style.row} ${style.text}`}>{message}</div>
+
+          <div className={`${style.row} ${style.text}`}>
+            <img src={this.props.image} />
+          </div>
+
           <hr />
         </div>
         <div className={style.footer}>
