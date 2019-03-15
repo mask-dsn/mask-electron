@@ -112,7 +112,7 @@ app.on('ready', async () => {
   // eslint-disable-next-line
   new AppUpdater();
 
-  const chain = await startUp();
+  await startUp();
 
   // IPFS
   // const node = new IPFS();

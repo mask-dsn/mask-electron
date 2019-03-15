@@ -41,7 +41,7 @@ export default class Board extends Component {
         </div>
         <div className={styles.scrollbox}>
           {this.state.chain.map((block, index) => (
-            <Feed key={index} post={block.post} />
+            <Feed key={index} post={block.data} />
           ))}
         </div>
       </div>

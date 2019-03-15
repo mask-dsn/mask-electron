@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { Block } from './Block';
-import { Post } from './Post';
+import { User } from './User';
 
 const CryptoJS = require('crypto-js');
 const express = require('express');
@@ -13,34 +13,27 @@ const MessageType = {
   QUERY_ALL: 1,
   RESPONSE_BLOCKCHAIN: 2
 };
-const httpPort = process.env.HTTP_PORT || 3001;
-const p2pPort = process.env.P2P_PORT || 6001;
 
-export class Chain {
-  constructor(peers, savedChain) {
-    this.blockchain =
+export class UserChain {
+  constructor(peers, savedChain, httpPort, p2pPort) {
+    this.blockChain =
       savedChain.length === 0 ? [this.getGenesisBlock()] : savedChain;
     this.sockets = [];
-    this.initHttpServer();
-    this.initP2PServer();
+
+    this.initHttpServer(httpPort);
+    this.initP2PServer(p2pPort);
     this.connectToPeers(peers);
   }
 
   getGenesisBlock() {
-    return new Block(
-      0,
-      '0',
-      1465154705,
-      new Post(0, 'Gensis Block', 1465154705),
-      '816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7'
-    );
+    return new Block(0, '0', 0, new User('', '', ''));
   }
 
-  initHttpServer() {
+  initHttpServer(httpPort) {
     const app = express();
     app.use(bodyParser.json());
 
-    app.get('/blocks', (req, res) => res.send(JSON.stringify(this.blockchain)));
+    app.get('/blocks', (req, res) => res.send(JSON.stringify(this.blockChain)));
     app.post('/mineBlock', (req, res) => {
       const newBlock = this.generateNextBlock(req.body);
       this.addBlock(newBlock);
@@ -64,7 +57,7 @@ export class Chain {
     );
   }
 
-  initP2PServer() {
+  initP2PServer(p2pPort) {
     const server = new WebSocket.Server({ port: p2pPort });
     server.on('connection', ws => this.initConnection(ws));
     console.log(`listening websocket p2p port on: ${p2pPort}`);
@@ -89,7 +82,7 @@ export class Chain {
           this.write(ws, this.responseChainMsg());
           break;
         case MessageType.RESPONSE_BLOCKCHAIN:
-          this.handleBlockchainResponse(message);
+          this.handleBlockChainResponse(message);
           break;
         default:
           break;
@@ -106,7 +99,7 @@ export class Chain {
     ws.on('error', () => closeConnection(ws));
   }
 
-  generateNextBlock(newPost) {
+  generateNextBlock(data) {
     const previousBlock = this.getLatestBlock();
     const nextIndex = previousBlock.index + 1;
     const nextTimestamp = new Date().getTime() / 1000;
@@ -114,13 +107,13 @@ export class Chain {
       nextIndex,
       previousBlock.hash,
       nextTimestamp,
-      newPost
+      data
     );
     return new Block(
       nextIndex,
       previousBlock.hash,
       nextTimestamp,
-      newPost,
+      data,
       nextHash
     );
   }
@@ -140,7 +133,7 @@ export class Chain {
 
   addBlock(newBlock) {
     if (this.isValidNewBlock(newBlock, this.getLatestBlock())) {
-      this.blockchain.push(newBlock);
+      this.blockChain.push(newBlock);
     }
   }
 
@@ -175,40 +168,30 @@ export class Chain {
     });
   }
 
-  handleBlockchainResponse(message) {
+  handleBlockChainResponse(message) {
     const receivedBlocksJson = JSON.parse(message.data).sort(
       (b1, b2) => b1.index - b2.index
     );
-    console.log(message.data);
-    const receivedBlocks = receivedBlocksJson.map(e =>
-      !e
-        ? {}
-        : new Block(
-            e.index,
-            e.previousHash,
-            e.timestamp,
-            !e.data
-              ? {}
-              : new Post(e.data.userId, e.data.message, e.data.timestamp),
-            e.hash
-          )
+    const receivedBlocks = receivedBlocksJson.map(
+      e =>
+        new Block(
+          e.index,
+          e.previousHash,
+          e.timestamp,
+          !e.data
+            ? {}
+            : new User(
+                e.data.userName,
+                e.data.bio,
+                e.data.passwordHash,
+                e.data.userId,
+                e.data.macAddress,
+                e.data.avatar
+              ),
+          e.hash
+        )
     );
-    // const receivedBlocks = [];
-    // receivedBlocksJson.forEach(element => {
-    //   const elementPost = new Post(
-    //     element.data.userId,
-    //     element.data.message,
-    //     element.data.timestamp
-    //   );
-    //   const elementBlock = new Block(
-    //     element.index,
-    //     element.previousHash,
-    //     element.timestamp,
-    //     elementPost,
-    //     element.hash
-    //   );
-    //   receivedBlocks.push(elementBlock);
-    // });
+
     const latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];
     const latestBlockHeld = this.getLatestBlock();
     if (latestBlockReceived.index > latestBlockHeld.index) {
@@ -219,7 +202,7 @@ export class Chain {
       );
       if (latestBlockHeld.hash === latestBlockReceived.previousHash) {
         console.log('We can append the received block to our chain');
-        this.blockchain.push(latestBlockReceived);
+        this.blockChain.push(latestBlockReceived);
         this.broadcast(this.responseLatestMsg());
       } else if (receivedBlocks.length === 1) {
         console.log('We have to query the chain from our peer');
@@ -238,12 +221,12 @@ export class Chain {
   replaceChain(newBlocks) {
     if (
       this.isValidChain(newBlocks) &&
-      newBlocks.length > this.blockchain.length
+      newBlocks.length > this.blockChain.length
     ) {
       console.log(
         'Received blockchain is valid. Replacing current blockchain with received blockchain'
       );
-      this.blockchain = newBlocks;
+      this.blockChain = newBlocks;
       this.broadcast(this.responseLatestMsg());
     } else {
       console.log('Received blockchain invalid');
@@ -269,7 +252,7 @@ export class Chain {
   }
 
   getLatestBlock() {
-    return this.blockchain[this.blockchain.length - 1];
+    return this.blockChain[this.blockChain.length - 1];
   }
 
   queryChainLengthMsg() {
@@ -283,7 +266,7 @@ export class Chain {
   responseChainMsg() {
     return {
       type: MessageType.RESPONSE_BLOCKCHAIN,
-      data: JSON.stringify(this.blockchain)
+      data: JSON.stringify(this.blockChain)
     };
   }
 
@@ -292,14 +275,6 @@ export class Chain {
       type: MessageType.RESPONSE_BLOCKCHAIN,
       data: JSON.stringify([this.getLatestBlock()])
     };
-  }
-
-  postNewBlock(userId, message) {
-    const newPost = new Post(userId, message, new Date().getTime() / 1000);
-    const newBlock = this.generateNextBlock(newPost);
-    this.addBlock(newBlock);
-    this.broadcast(this.responseLatestMsg());
-    console.log(`block added: ${JSON.stringify(newBlock)}`);
   }
 
   write(ws, message) {
