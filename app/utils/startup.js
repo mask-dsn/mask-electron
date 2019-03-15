@@ -6,7 +6,7 @@ import { getSavedChain } from './persistBlockchain';
 async function startUp() {
   const peers = await connect();
   const savedChain = getSavedChain();
-  new Chain(peers, []);
+  new Chain(peers, savedChain);
   new UserChain(peers, [], 3002, 6002);
 }
 

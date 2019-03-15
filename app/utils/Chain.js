@@ -1,6 +1,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
-import { Block } from './Block';
+import { Block } from '../classes/Block';
 import { Post } from './Post';
 
 const CryptoJS = require('crypto-js');
@@ -27,13 +27,7 @@ export class Chain {
   }
 
   getGenesisBlock() {
-    return new Block(
-      0,
-      '0',
-      1465154705,
-      new Post(0, 'Gensis Block', 1465154705),
-      '816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7'
-    );
+    return new Block(0, '0', 0, new Post(0, 'Hello world!', 0));
   }
 
   initHttpServer() {

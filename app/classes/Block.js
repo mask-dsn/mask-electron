@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js';
+
 export class Block {
   constructor(index, previousHash, timestamp, data, hash) {
     this.index = index;
