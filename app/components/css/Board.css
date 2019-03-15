@@ -30,6 +30,7 @@
 }
 
 .btnGroup {
+  z-index: 1;
   position: relative;
   width: 600px;
   margin: 0 auto;
