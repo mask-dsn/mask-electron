@@ -53,7 +53,7 @@ export default class Postbox extends Component {
         console.log(error);
       });
     // reset the image upload
-    this.setState({ postImage: null, showImageName: false});
+    this.setState({ postImage: null, showImageName: false, postContent: '', imageHash: 'null'});
   }
 
   togglePopup() {
