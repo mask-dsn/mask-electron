@@ -3,13 +3,16 @@ import style from './css/Feed.css';
 import { getDateFromTimestamp } from '../utils/timestampUtil';
 
 export default class Feed extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
+
   render() {
     const userId = this.props.post.userId;
     const message = this.props.post.message;
     const timestamp = getDateFromTimestamp(this.props.post.timestamp);
+
+    const avatarUrl = `https://avatars.dicebear.com/v2/avataaars/${userId}.svg`;
 
     return (
       <div className={style.facebookbox}>
@@ -19,7 +22,7 @@ export default class Feed extends Component {
           </div>
           <div className={`${style.row} ${style.header}`}>
             <div className={style.avatar}>
-              <img src="http://placehold.it/40x40" alt="" />
+              <img src={avatarUrl} />
             </div>
             <div className={style.name}>
               <h5>{userId}</h5>
