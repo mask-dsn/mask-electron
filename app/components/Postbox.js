@@ -8,15 +8,22 @@ import Popup from './ImageUploader/Popup';
 export default class Postbox extends Component {
   constructor(props) {
     super(props);
-    this.state = { postContent: '', userId: this.props.userId, showPopup: false };
+    this.state = { postContent: '', userId: this.props.userId, showPopup: false, postImage: null, showImageName: false };
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePost = this.handlePost.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
+    this.handleImage = this.handleImage.bind(this);
   }
 
   handleChange(event) {
     this.setState({ postContent: event.target.value });
+  }
+
+  handleImage(image) {
+    this.setState({ postImage: image, showImageName: true });
+    this.togglePopup();
+    console.log(image);
   }
 
   handlePost(event) {
@@ -55,10 +62,15 @@ export default class Postbox extends Component {
             <input type="submit" value="Post" />
           </form>
           <button className={styles.uploadbtn} onClick={this.togglePopup}>Upload Image</button>
+          {this.state.showImageName ?
+            <h1>{'Image attached.'}</h1>
+            : null
+          }
         </div>
           {this.state.showPopup ?
             <Popup
               closePopup={this.togglePopup}
+              handleImage={this.handleImage}
             />
             : null
           }
