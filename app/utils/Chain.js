@@ -174,35 +174,18 @@ export class Chain {
       (b1, b2) => b1.index - b2.index
     );
     console.log(message.data);
-    const receivedBlocks = receivedBlocksJson.map(e =>
-      !e
-        ? {}
-        : new Block(
-            e.index,
-            e.previousHash,
-            e.timestamp,
-            !e.data
-              ? {}
-              : new Post(e.data.userId, e.data.message, e.data.timestamp),
-            e.hash
-          )
+    const receivedBlocks = receivedBlocksJson.map(
+      e =>
+        new Block(
+          e.index,
+          e.previousHash,
+          e.timestamp,
+          !e.data
+            ? {}
+            : new Post(e.data.userId, e.data.message, e.data.timestamp),
+          e.hash
+        )
     );
-    // const receivedBlocks = [];
-    // receivedBlocksJson.forEach(element => {
-    //   const elementPost = new Post(
-    //     element.data.userId,
-    //     element.data.message,
-    //     element.data.timestamp
-    //   );
-    //   const elementBlock = new Block(
-    //     element.index,
-    //     element.previousHash,
-    //     element.timestamp,
-    //     elementPost,
-    //     element.hash
-    //   );
-    //   receivedBlocks.push(elementBlock);
-    // });
     const latestBlockReceived = receivedBlocks[receivedBlocks.length - 1];
     const latestBlockHeld = this.getLatestBlock();
     if (latestBlockReceived.index > latestBlockHeld.index) {
