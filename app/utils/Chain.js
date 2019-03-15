@@ -16,7 +16,7 @@ const MessageType = {
 const httpPort = process.env.HTTP_PORT || 3001;
 const p2pPort = process.env.P2P_PORT || 6001;
 
-export default class Chain {
+export class Chain {
   constructor(peers, savedChain) {
     this.blockchain =
       savedChain.length === 0 ? [this.getGenesisBlock()] : savedChain;
@@ -26,7 +26,7 @@ export default class Chain {
     this.connectToPeers(peers);
   }
 
-  static getGenesisBlock() {
+  getGenesisBlock() {
     return new Block(
       0,
       '0',
@@ -134,7 +134,7 @@ export default class Chain {
     );
   }
 
-  static calculateHash(index, previousHash, timestamp, data) {
+  calculateHash(index, previousHash, timestamp, data) {
     return CryptoJS.SHA256(index + previousHash + timestamp + data).toString();
   }
 
@@ -258,11 +258,11 @@ export default class Chain {
     return this.blockchain[this.blockchain.length - 1];
   }
 
-  static queryChainLengthMsg() {
+  queryChainLengthMsg() {
     return { type: MessageType.QUERY_LATEST };
   }
 
-  static queryAllMsg() {
+  queryAllMsg() {
     return { type: MessageType.QUERY_ALL };
   }
 
@@ -288,7 +288,7 @@ export default class Chain {
     console.log(`block added: ${JSON.stringify(newBlock)}`);
   }
 
-  static write(ws, message) {
+  write(ws, message) {
     ws.send(JSON.stringify(message));
   }
 
