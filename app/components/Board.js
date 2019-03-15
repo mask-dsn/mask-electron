@@ -40,9 +40,9 @@ export default class Board extends Component {
   bindImg() {
     const imageArray = new Array(this.state.chain.length);
     this.state.chain.map(block => {
-      if (block.post.ipfsPointer !== 'null') {
+      if (block.data.ipfsPointer !== 'null') {
         axios
-          .get(`https://ipfs.io/ipfs/${block.post.ipfsPointer}`)
+          .get(`https://ipfs.io/ipfs/${block.data.ipfsPointer}`)
           .then(res => {
             const image = res.data;
             imageArray[block.index] = image;
@@ -79,7 +79,7 @@ export default class Board extends Component {
             <Feed
               image={this.state.imageArray[index]}
               key={index}
-              post={block.post}
+              post={block.data}
             />
           ))}
         </div>
