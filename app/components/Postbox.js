@@ -4,26 +4,46 @@ import axios from 'axios';
 import styles from './css/Postbox.css';
 import { Post } from '../utils/Post';
 import Popup from './ImageUploader/Popup';
+import IPFS from 'ipfs';
 
 export default class Postbox extends Component {
   constructor(props) {
     super(props);
-    this.state = { postContent: '', userId: this.props.userId, showPopup: false, postImage: null, showImageName: false };
+    this.state = { postContent: '', userId: this.props.userId, showPopup: false, postImage: null, showImageName: false, imageHash: null };
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePost = this.handlePost.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
     this.handleImage = this.handleImage.bind(this);
+    this.uploadImg = this.uploadImg.bind(this);
   }
 
   handleChange(event) {
     this.setState({ postContent: event.target.value });
   }
 
-  handleImage(image) {
-    this.setState({ postImage: image, showImageName: true });
+  handleImage(pathUrl, imageData) {
     this.togglePopup();
-    console.log(image);
+    console.log(imageData);
+    console.log(pathUrl.path);
+    this.uploadImg(pathUrl.path, imageData);
+    this.setState({ postImage: imageData, showImageName: true});
+  }
+
+  uploadImg(imagePath, ImageData){
+    const node = new IPFS();
+    node.on('ready', async () => {
+      const files = Buffer(ImageData);
+      const filesAdded = await node.add(files);
+      const imageHash = filesAdded[0].hash;
+      this.setState({imageHash: imageHash});
+      console.log('Added file:', filesAdded[0].path, filesAdded[0].hash);
+
+      const fileBuffer = await node.cat(filesAdded[0].hash);
+      var img = fileBuffer.toString();
+      console.log('printing image');
+      console.log(img);
+    });
   }
 
   handlePost(event) {

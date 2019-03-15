@@ -10,7 +10,7 @@ export default class ImageUpload extends Component {
   _handleSubmit(e) {
     e.preventDefault();
     // TODO: do something with -> this.state.file
-    this.props.handleImage(this.state.file);
+    this.props.handleImage(this.state.file, this.state.imagePreviewUrl);
     // console.log('handle uploading-', this.state.file);
   }
 
