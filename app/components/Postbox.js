@@ -9,7 +9,7 @@ import IPFS from 'ipfs';
 export default class Postbox extends Component {
   constructor(props) {
     super(props);
-    this.state = { postContent: '', userId: this.props.userId, showPopup: false, postImage: null, showImageName: false, imageHash: null };
+    this.state = { postContent: '', userId: this.props.userId, showPopup: false, postImage: null, showImageName: false, imageHash: 'null' };
 
     this.handleChange = this.handleChange.bind(this);
     this.handlePost = this.handlePost.bind(this);
@@ -26,33 +26,25 @@ export default class Postbox extends Component {
     this.togglePopup();
     console.log(imageData);
     console.log(pathUrl.path);
-    this.uploadImg(pathUrl.path, imageData);
+    this.uploadImg(this.props.ipfs, pathUrl.path, imageData);
     this.setState({ postImage: imageData, showImageName: true});
   }
 
-  uploadImg(imagePath, ImageData){
-    const node = new IPFS();
-    node.on('ready', async () => {
-      const files = Buffer(ImageData);
-      const filesAdded = await node.add(files);
-      const imageHash = filesAdded[0].hash;
-      this.setState({imageHash: imageHash});
-      console.log('Added file:', filesAdded[0].path, filesAdded[0].hash);
-
-      const fileBuffer = await node.cat(filesAdded[0].hash);
-      var img = fileBuffer.toString();
-      console.log('printing image');
-      console.log(img);
-    });
+  async uploadImg(node, imagePath, ImageData){
+    const files = Buffer(ImageData);
+    const filesAdded = await node.add(files);
+    const imageHash = filesAdded[0].hash;
+    this.setState({imageHash: imageHash});
+    console.log('Added file:', filesAdded[0].path, filesAdded[0].hash);
   }
 
   handlePost(event) {
     event.preventDefault();
-    console.log(`Posting data: ${this.state.postContent}`);
+    console.log(`Posting data: ${this.state.postContent} and ${this.state.imageHash}`);
     axios
       .post(
         'http://localhost:3001/mineBlock',
-        new Post(this.props.userId, this.state.postContent, new Date())
+        new Post(this.props.userId, this.state.postContent, this.state.imageHash, new Date())
       )
       .then(response => {
         this.props.refresh();
@@ -60,6 +52,8 @@ export default class Postbox extends Component {
       .catch(error => {
         console.log(error);
       });
+    // reset the image upload
+    this.setState({ postImage: null, showImageName: false});
   }
 
   togglePopup() {

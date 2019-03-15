@@ -1,9 +1,10 @@
 const CryptoJS = require('crypto-js');
 
 export class Post {
-  constructor(userId, message, timestamp) {
+  constructor(userId, message, ipfsPointer, timestamp) {
     this.userId = userId;
     this.message = message;
+    this.ipfsPointer = ipfsPointer;
     this.timestamp = timestamp;
   }
 

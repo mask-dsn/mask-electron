@@ -28,7 +28,7 @@ export class Chain {
       0,
       '0',
       1465154705,
-      new Post(0, 'Gensis Block', 1465154705),
+      new Post(0, 'Gensis Block', 'QmSbsMtapBXSJugejtoCwETpGsSiy3aw9g5NatumYVeYiy', 1465154705),
       '816534932c2b7154836da6afc367695e6337db8a921823784c14378abed4f7d7'
     );
   }
@@ -179,6 +179,7 @@ export class Chain {
       const elementPost = new Post(
         element.post.userId,
         element.post.message,
+        element.post.ipfsPointer,
         element.post.timestamp
       );
       const elementBlock = new Block(
