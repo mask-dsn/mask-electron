@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 const CryptoJS = require('crypto-js');
 
 export class Post {
