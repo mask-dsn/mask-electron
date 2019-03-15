@@ -113,8 +113,6 @@ app.on('ready', async () => {
 
   const chain = await startUp();
 
-  updatePeer(updater);
-
   // IPFS
   // const node = new IPFS();
 
