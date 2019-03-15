@@ -17,6 +17,7 @@ import IPFS from 'ipfs';
 import MenuBuilder from './menu';
 import { disconnect } from './utils/tracker';
 import { startUp } from './utils/startup';
+import { saveChain } from './utils/persistBlockchain';
 
 export default class AppUpdater {
   constructor() {
@@ -57,9 +58,15 @@ const installExtensions = async () => {
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
+
+  var callback = (err) => {
+    if (err) throw err;
+
+    if (process.platform !== 'darwin') 
+      app.quit();
   }
+
+  saveChain(callback);
 });
 
 const updater = peers => {
