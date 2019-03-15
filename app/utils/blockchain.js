@@ -7,6 +7,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-var */
 /* eslint-disable vars-on-top */
+
 const CryptoJS = require('crypto-js');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -255,4 +256,11 @@ var postNewBlock = blockData => {
 var write = (ws, message) => ws.send(JSON.stringify(message));
 var broadcast = message => sockets.forEach(socket => write(socket, message));
 
-export { connectToPeers, initHttpServer, initP2PServer, Block, blockchain, postNewBlock };
+export {
+  connectToPeers,
+  initHttpServer,
+  initP2PServer,
+  Block,
+  blockchain,
+  postNewBlock
+};

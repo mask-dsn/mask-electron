@@ -15,8 +15,8 @@ const http_port = process.env.HTTP_PORT || 3001;
 const p2p_port = process.env.P2P_PORT || 6001;
 
 export class Chain {
-  constructor(peers) {
-    this.blockchain = [this.getGenesisBlock()];
+  constructor(peers, savedChain) {
+    this.blockchain = savedChain.length == 0 ? [getGenesisBlock()] : savedChain;
     this.sockets = [];
     this.initHttpServer();
     this.initP2PServer();
