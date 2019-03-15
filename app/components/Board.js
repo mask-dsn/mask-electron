@@ -10,7 +10,8 @@ export default class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chain: []
+      postChain: [],
+      userChain: []
     };
 
     this.handleRefresh = this.handleRefresh.bind(this);
@@ -20,8 +21,12 @@ export default class Board extends Component {
 
   handleRefresh() {
     axios.get('http://localhost:3001/blocks').then(res => {
-      const chain = res.data.reverse();
-      this.setState({ chain });
+      const postChain = res.data.reverse();
+      this.setState({ postChain });
+    });
+    axios.get('http://localhost:3002/blocks').then(res => {
+      const userChain = res.data.reverse();
+      this.setState({ userChain });
     });
   }
 
@@ -40,7 +45,7 @@ export default class Board extends Component {
           </button>
         </div>
         <div className={styles.scrollbox}>
-          {this.state.chain.map((block, index) => (
+          {this.state.postChain.map((block, index) => (
             <Feed key={index} post={block.data} />
           ))}
         </div>

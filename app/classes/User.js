@@ -1,5 +1,15 @@
+import getmac from 'getmac';
+
 export class User {
-  constructor(userName, bio, passwordHash, userId, macAddress, avatar) {
+  constructor(
+    userName,
+    bio,
+    passwordHash,
+    userId,
+    macAddress,
+    avatar,
+    timestamp
+  ) {
     this.userName = userName;
     this.bio = bio;
     this.passwordHash = passwordHash;
@@ -7,6 +17,7 @@ export class User {
     this.userId = !userId ? this.generateId() : userId;
     this.macAddress = !macAddress ? this.getMacAddress() : macAddress;
     this.avatar = !avatar ? this.generateAvatar() : avatar;
+    this.timestamp = !timestamp ? new Date().getTime() : timestamp;
   }
 
   generateId() {
@@ -14,7 +25,11 @@ export class User {
   }
 
   getMacAddress() {
-    return '';
+    getmac.getMac((err, mac) => {
+      if (err) throw err;
+      console.log(mac);
+      this.macAddress = mac;
+    });
   }
 
   generateAvatar() {
