@@ -57,11 +57,21 @@ export default class Board extends Component {
   }
 
   render() {
+    var userId = "philzhan";
+
+    if ( require('getmac').isMac("ac:de:48:00:11:22") ) {
+      userId = "amandajiang";
+    } 
+
+    // add your mac
+    // else if (require('getmac').isMac("xx:xx:xx:xx"))
+    // set userId
+
     return (
       <div>
         <Postbox
           ipfs={this.state.node}
-          userId="philzhan"
+          userId={userId}
           refresh={this.handleRefresh}
         />
         <div className={styles.btnGroup}>
