@@ -13,6 +13,7 @@ export default class Feed extends Component {
     const timestamp = getDateFromTimestamp(this.props.post.timestamp);
 
     const avatarUrl = `https://avatars.dicebear.com/v2/avataaars/${userId}.svg`;
+    const currentUserAvatar = `https://avatars.dicebear.com/v2/avataaars/${this.props.currentUser}.svg`;
 
     return (
       <div className={style.facebookbox}>
@@ -41,7 +42,7 @@ export default class Feed extends Component {
           <a href="#">6 people</a> like this.
           <div className={style.row}>
             <div className={style.smallavatar}>
-              <img src="http://placehold.it/32x32" alt="" />
+              <img src={currentUserAvatar} alt="" />
             </div>
             <div className={style.writecomment}>
               <input type="text" placeholder="Write your comment..." />

@@ -90,6 +90,7 @@ export default class Board extends Component {
               image={this.state.imageArray[index]}
               key={index}
               post={block.post}
+              currentUser={userId}
             />
           ))}
         </div>
