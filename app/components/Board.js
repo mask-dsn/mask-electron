@@ -39,6 +39,7 @@ export default class Board extends Component {
 
   bindImg() {
     const imageArray = new Array(this.state.chain.length);
+    imageArray.fill("loading");
     this.state.chain.map(block => {
       if (block.post.ipfsPointer !== 'null') {
         axios
