@@ -6,6 +6,7 @@ import styles from './css/Board.css';
 import routes from '../constants/routes';
 import Postbox from './Postbox';
 import Feed from './Feed';
+import SearchAppBar from './SearchBar';
 
 export default class Board extends Component {
   constructor(props) {
@@ -13,10 +14,13 @@ export default class Board extends Component {
     this.state = {
       node: '',
       chain: [],
+      chainCopy: [],
       imageArray: []
     };
 
     this.handleRefresh = this.handleRefresh.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+
     this.node = new IPFS();
     this.node.on('ready', async () => {
       this.setState({ node: this.node });
@@ -32,9 +36,23 @@ export default class Board extends Component {
       chain.map(block => {
         block.index = chain.indexOf(block);
       });
-      this.setState({ chain });
+      this.setState({ chain, chainCopy: chain });
       this.bindImg();
     });
+  }
+
+  handleSearch(event) {
+    const keyword = event.target.value;
+    if (!keyword) {
+      this.setState({ chain: this.state.chainCopy });
+    } else {
+      const chain = this.state.chainCopy.filter(post =>
+        JSON.stringify(post)
+          .toLowerCase()
+          .includes(keyword)
+      );
+      this.setState({ chain });
+    }
   }
 
   bindImg() {
@@ -59,6 +77,7 @@ export default class Board extends Component {
   render() {
     return (
       <div>
+        <SearchAppBar handleSearch={this.handleSearch} />
         <Postbox
           ipfs={this.state.node}
           userId="philzhan"
@@ -77,7 +96,7 @@ export default class Board extends Component {
         <div className={styles.scrollbox}>
           {this.state.chain.map((block, index) => (
             <Feed
-              image={this.state.imageArray[index]}
+              image={this.state.imageArray[block.index]}
               key={index}
               post={block.post}
             />
