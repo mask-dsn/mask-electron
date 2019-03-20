@@ -57,15 +57,12 @@ export default class Board extends Component {
   }
 
   render() {
-    var userId = "philzhan";
-
-    if ( require('getmac').isMac("ac:de:48:00:11:22") ) {
+    var userId = "";
+    
+    var macAddr = require('node-getmac')
+    if ( macAddr == "ac:de:48:00:11:22" ) {
       userId = "amandajiang";
-    } 
-
-    // add your mac
-    // else if (require('getmac').isMac("xx:xx:xx:xx"))
-    // set userId
+    }
 
     return (
       <div>

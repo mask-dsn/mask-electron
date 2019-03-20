@@ -54,3 +54,4 @@ npm-debug.log.*
 **/.cache
 
 **/*-lock.json
+yarn-lock
