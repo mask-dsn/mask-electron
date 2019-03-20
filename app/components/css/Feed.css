@@ -115,6 +115,24 @@ img {
   margin-right: 8px;
 }
 
+.facebookbox .footer .writecomment {
+  display: flex;
+}
+
+.facebookbox .comment {
+  display: flex;
+  margin-top: 15px;
+  margin-left: 28px;
+}
+
+.postbtn {
+  background-color: #07c;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
 .facebookbox .footer .writecomment input[type='text'] {
   background: #fff;
   border: 1px solid #dcdee3;
@@ -122,4 +140,9 @@ img {
   min-height: 16px;
   width: calc(100% - 32px - 22px);
   float: left;
+  margin-right: 10px;
+}
+
+.image_loading{
+  object-fit: scale-down;
 }

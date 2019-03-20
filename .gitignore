@@ -52,3 +52,6 @@ npm-debug.log.*
 
 **/.ipfs
 **/.cache
+
+**/*-lock.json
+yarn-lock

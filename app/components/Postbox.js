@@ -82,16 +82,15 @@ export default class Postbox extends Component {
   }
 
   render() {
-    const avatarUrl = `https://avatars.dicebear.com/v2/avataaars/${
-      this.props.userId
-    }.svg`;
+    const userId = this.props.userId;
+    const avatarUrl = `https://avatars.dicebear.com/v2/avataaars/${userId}.svg`;
     return (
       <section>
         <div>
           <img src={avatarUrl} />
           <form onSubmit={this.handlePost}>
             <textarea
-              placeholder="What's in your mind?"
+              placeholder={`${userId}, What's on your mind?`}
               value={this.state.postContent}
               onChange={this.handleChange}
             />
