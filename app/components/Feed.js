@@ -39,7 +39,7 @@ export default class Feed extends Component {
 
     var jsx = [];
     for (var i=0; i<this.state.comments.length; i++) {
-      jsx.push(<div className={`${style.comment}`}><div className={style.smallavatar}><img src={currentUserAvatar} alt="" /></div><div className={`${style.msg} ${style.text}`}>{this.state.comments[i]}</div></div>);
+      jsx.push(<div key={i} className={`${style.comment}`}><div className={style.smallavatar}><img src={currentUserAvatar} alt="" /></div><div className={`${style.msg} ${style.text}`}>{this.state.comments[i]}</div></div>);
     }
 
     return (
