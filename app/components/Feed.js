@@ -61,7 +61,7 @@ export default class Feed extends Component {
           <div className={`${style.row} ${style.text}`}>{message}</div>
           <div className={`${style.row} ${style.text}`}>
           {this.props.image === "loading" ?
-               <img className={style.image_loading} src={image_loading} />
+               <img className={style.image_loading} src={"https://i.imgur.com/0JSotab.gif"} />
              : <img src={this.props.image} />}
           </div>
 
