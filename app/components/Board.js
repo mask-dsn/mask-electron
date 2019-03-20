@@ -39,7 +39,7 @@ export default class Board extends Component {
 
   bindImg() {
     const imageArray = new Array(this.state.chain.length);
-    imageArray.fill("loading");
+    imageArray.fill('loading');
     this.state.chain.map(block => {
       if (block.post.ipfsPointer !== 'null') {
         axios
@@ -58,11 +58,17 @@ export default class Board extends Component {
   }
 
   render() {
-    var userId = "";
-    
-    var macAddr = require('node-getmac')
-    if ( macAddr == "ac:de:48:00:11:22" ) {
-      userId = "amandajiang";
+    let userId = 'guest';
+
+    const macAddr = require('node-getmac');
+    if (macAddr == 'ac:de:48:00:11:22') {
+      userId = 'amandajiang';
+    } else if (macAddr === '8c:85:90:bd:bf:2a') {
+      userId = 'philzhan';
+    } else if (macAddr === '54:26:96:d3:87:d1') {
+      userId = 'belledastone';
+    } else if (macAddr == '5c:f9:38:a4:59:c0') {
+      userId = 'Black_P';
     }
 
     return (
