@@ -87,6 +87,8 @@ export default class Board extends Component {
       userId = 'belledastone';
     } else if (macAddr == '5c:f9:38:a4:59:c0') {
       userId = 'Black_P';
+    } else if (macAddr == '34:36:3b:7e:ea:be') {
+      userId = 'April Pan';
     }
 
     return (
