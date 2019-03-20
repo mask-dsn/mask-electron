@@ -5,6 +5,28 @@ import { getDateFromTimestamp } from '../utils/timestampUtil';
 export default class Feed extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      newComment: "",
+      comments: []
+    };
+
+    this.handleComment = this.handleComment.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleComment(event) {
+    if (this.state.newComment != "") {
+      var c = this.state.comments;
+      c.push(this.state.newComment);
+
+      this.setState({comments: c});
+      this.setState({newComment: ""});
+    }
+  }
+
+  handleChange(event) {
+    this.setState({ newComment: event.target.value });
   }
 
   render() {
@@ -14,6 +36,11 @@ export default class Feed extends Component {
 
     const avatarUrl = `https://avatars.dicebear.com/v2/avataaars/${userId}.svg`;
     const currentUserAvatar = `https://avatars.dicebear.com/v2/avataaars/${this.props.currentUser}.svg`;
+
+    var jsx = [];
+    for (var i=0; i<this.state.comments.length; i++) {
+      jsx.push(<div className={`${style.comment}`}><div className={style.smallavatar}><img src={currentUserAvatar} alt="" /></div><div className={`${style.msg} ${style.text}`}>{this.state.comments[i]}</div></div>);
+    }
 
     return (
       <div className={style.facebookbox}>
@@ -31,21 +58,23 @@ export default class Feed extends Component {
             </div>
           </div>
           <div className={`${style.row} ${style.text}`}>{message}</div>
-
           <div className={`${style.row} ${style.text}`}>
             <img src={this.props.image} />
           </div>
 
-          <hr />
         </div>
         <div className={style.footer}>
           <a href="#">6 people</a> like this.
+          
+          {jsx}
+
           <div className={style.row}>
             <div className={style.smallavatar}>
               <img src={currentUserAvatar} alt="" />
             </div>
             <div className={style.writecomment}>
-              <input type="text" placeholder="Write your comment..." />
+              <input type="text" onChange={this.handleChange} placeholder="Write your comment..." value={this.state.newComment}  />
+              <button className={style.postbtn} type="submit" onClick={this.handleComment}>Post</button>
             </div>
           </div>
         </div>
