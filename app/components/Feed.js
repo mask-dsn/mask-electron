@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import style from './css/Feed.css';
 import { getDateFromTimestamp } from '../utils/timestampUtil';
+import * as image_loading from "../../resources/image_loading.gif";
 
 export default class Feed extends Component {
   constructor(props) {
@@ -59,7 +60,9 @@ export default class Feed extends Component {
           </div>
           <div className={`${style.row} ${style.text}`}>{message}</div>
           <div className={`${style.row} ${style.text}`}>
-            <img src={this.props.image} />
+          {this.props.image === "loading" ?
+               <img className={style.image_loading} src={image_loading} />
+             : <img src={this.props.image} />}
           </div>
 
         </div>
